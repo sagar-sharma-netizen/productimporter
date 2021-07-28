@@ -1,3 +1,4 @@
+import traceback
 from typing import Optional, List, Dict, Any, Tuple
 from contextlib import suppress
 from utils.exception import CustomException
@@ -10,11 +11,44 @@ from django.contrib.sites.models import Site
 
 @handle_api_exception
 @api_handler()
-def list_questions(request_params, query_params: Dict, body: Dict):
+def list_create_questions(request_params, query_params: Dict, body: Dict, **kwargs):
+    status = 200
+    if request_params.get("method") == "POST":
+        return create_question(request_params, body, **kwargs)
     page = query_params.get("page", 1)
     page_size = query_params.get("page_size", 10)
     data = question_gateway.list_questions(page=page, page_size=page_size)
-    status = 200
+    return data, status
+
+
+def create_question(request_params, body, **kwargs):
+    status = 201
+    questions = question_gateway.list_questions(page=1, page_size=100)
+    if len(questions) >= 10:
+        raise CustomException(
+            title="A maximum of 10 questions can be created",
+            detail="Maximum limit of questions reached"
+        )
+    if not (body.get('question') and body.get('answer_type') and body.get('details')):
+        raise CustomException(
+            title="question, details and answer_type are required are required!",
+            invalid_params=[
+                {
+                    "question": "What's your name?",
+                    "details": "Provide name",
+                    "answer_type": "string"
+                }
+            ]
+        )
+    answer_types = ["str", "int"]
+    if not body.get("answer_type") in answer_types:
+        raise CustomException(
+            title="answer_type must either be str (string) or int (integer)",
+            invalid_params=[
+                {"answer_type": "str/int"}
+            ]
+        )
+    data = question_gateway.create_question(question_data=body)
     return data, status
 
 
@@ -33,7 +67,7 @@ def retrieve(request_params, query_params: Dict, body: Dict, pk):
 
 @handle_api_exception
 @api_handler()
-def list_create(request_params, query_params: Dict, body: Dict, **kwargs):
+def list_create_surveys(request_params, query_params: Dict, body: Dict, **kwargs):
     status = 200
     if request_params.get("method") == "POST":
         return create_survey(request_params, body, **kwargs)

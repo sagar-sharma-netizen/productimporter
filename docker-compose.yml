@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  database:
+    restart: always
+    image: postgres:12.0-alpine
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    env_file:
+      - .env
+    ports:
+      -  '5432:5432'
+  web:
+    container_name: survey-app
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        requirements: ./requirements.txt
+    volumes:
+      - .:/app
+    expose:
+      - '8002'
+    env_file:
+      - ./.env
+    depends_on:
+      - database
+  nginx:
+    build: ./nginx
+    ports:
+      - '8004:8004'
+    depends_on:
+      - web
+
+
+
+volumes:
+  pgdata:

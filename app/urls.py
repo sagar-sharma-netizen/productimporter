@@ -20,8 +20,8 @@ import survey.views.survey
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('questions/', survey.views.survey.list_questions),
+    path('questions/', survey.views.survey.list_create_questions),
     path('survey/<int:pk>/', survey.views.survey.retrieve),
-    path('survey/', survey.views.survey.list_create),
+    path('survey/', survey.views.survey.list_create_surveys),
     path("mail-survey/", survey.views.survey.mail_survey)
 ]

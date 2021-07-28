@@ -52,3 +52,8 @@ CSRF_COOKIE_SECURE = False
 
 # EMAIL
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+
+# STATIC
+STATIC_URL = "/staticfiles/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
