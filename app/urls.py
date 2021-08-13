@@ -16,12 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-import survey.views.survey
+import products.views.product
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('questions/', survey.views.survey.list_create_questions),
-    path('survey/<int:pk>/', survey.views.survey.retrieve),
-    path('survey/', survey.views.survey.list_create_surveys),
-    path("mail-survey/", survey.views.survey.mail_survey)
+    path('products/', products.views.product.list_create_products),
+    path('products/<int:pk>/', products.views.product.retrieve),
+    path('products/upload/', products.views.product.upload_products)
 ]

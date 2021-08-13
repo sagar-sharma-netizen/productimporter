@@ -11,7 +11,7 @@ ENV PYTHONUNBUFFERED 1
 ENV DJANGO_SETTINGS_MODULE=app.settings
 
 # Install system dependencies
-RUN apk --update add python3-dev postgresql-dev gcc musl-dev
+RUN apk --update add python3-dev postgresql postgresql-client gcc musl-dev libpq-dev
 
 
 # copy entrypoint

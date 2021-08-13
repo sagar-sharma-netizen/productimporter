@@ -41,8 +41,9 @@ DATABASES = {
 
 # ORM APPS
 INSTALLED_APPS += [
-    "survey",
-    "django.contrib.sites"
+    "products",
+    "django.contrib.sites",
+    "django_celery_results"
 ]
 SITE_ID = 1
 
@@ -57,3 +58,14 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # STATIC
 STATIC_URL = "/staticfiles/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+
+# CELERY
+CELERY_RESULT_BACKEND = get_env_value("POSTGRES_DB")
+CELERY_CACHE_BACKEND = 'django-cache'
+CELERY_BROKER_URL = 'amqp://localhost'
+
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kolkata'
